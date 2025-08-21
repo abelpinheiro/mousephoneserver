@@ -3,6 +3,7 @@ package server
 import (
 	"log"
 	"mousephoneserver/internal/command"
+	"mousephoneserver/internal/input"
 	"net/http"
 
 	"github.com/gorilla/websocket"
@@ -30,6 +31,8 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
 
 	log.Println("New client connected")
 
+	inputController := input.NewController()
+
 	for {
 		_, message, err := ws.ReadMessage()
 
@@ -48,7 +51,7 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
 			continue
 		}
 
-		log.Printf("Command received: %+v", cmd)
+		inputController.Execute(cmd)
 	}
 }
 
