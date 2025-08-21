@@ -1,0 +1,14 @@
+# Binaries and compiled executables
+# project compiled executable
+mousephoneserver
+mousephoneserver.exe
+
+# Log files
+*.log
+
+# IDE and editor configuration files
+# Ignore jetbrains config directory
+.idea/
+
+# Codealike config file
+codealike.json
