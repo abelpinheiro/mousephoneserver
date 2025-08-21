@@ -2,6 +2,7 @@ package server
 
 import (
 	"log"
+	"mousephoneserver/internal/command"
 	"net/http"
 
 	"github.com/gorilla/websocket"
@@ -30,7 +31,7 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
 	log.Println("New client connected")
 
 	for {
-		messageType, message, err := ws.ReadMessage()
+		_, message, err := ws.ReadMessage()
 
 		if err != nil {
 			log.Printf("Connection error: %v", err)
@@ -38,7 +39,16 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
 		}
 
 		// Print message received
-		log.Printf("Message received (%d): %s", messageType, string(message))
+
+		cmd, err := command.Parse(message)
+		if err != nil {
+			log.Printf("Error trying to parse command: %v", err)
+
+			// Ignore invalid command and go for the next message
+			continue
+		}
+
+		log.Printf("Command received: %+v", cmd)
 	}
 }
 
